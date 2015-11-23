@@ -1,0 +1,26 @@
+.page-header
+  = link_to inventory_supply_lists_path, class: 'btn btn-default' do
+    %span.glyphicon.glyphicon-list-alt
+    Back
+  = link_to edit_inventory_supply_list_path(@inventory_supply_list), class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-pencil
+    Edit
+  %h1 Show inventory_supply_list
+
+%dl.dl-horizontal
+  %dt Condition:
+  %dd= @inventory_supply_list.Condition
+  %dt Supplydetail:
+  %dd= @inventory_supply_list.SupplyDetail
+  %dt Totalsupplyquantity:
+  %dd= @inventory_supply_list.TotalSupplyQuantity
+  %dt Earliestavailability:
+  %dd= @inventory_supply_list.EarliestAvailability
+  %dt Fnsku:
+  %dd= @inventory_supply_list.FNSKU
+  %dt Instocksupplyquantity:
+  %dd= @inventory_supply_list.InStockSupplyQuantity
+  %dt Asin:
+  %dd= @inventory_supply_list.ASIN
+  %dt Sellersku:
+  %dd= @inventory_supply_list.SellerSKU

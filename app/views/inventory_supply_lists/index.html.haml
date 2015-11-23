@@ -1,0 +1,36 @@
+.page-header
+  = link_to new_inventory_supply_list_path, class: 'btn btn-primary' do
+    %span.glyphicon.glyphicon-plus
+    New Inventory supply list
+  %h1 Listing inventory_supply_lists
+
+.table-responsive
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th Condition
+        %th Supplydetail
+        %th Totalsupplyquantity
+        %th Earliestavailability
+        %th Fnsku
+        %th Instocksupplyquantity
+        %th Asin
+        %th Sellersku
+        %th
+        %th
+        %th
+
+    %tbody
+      - @inventory_supply_lists.each do |inventory_supply_list|
+        %tr
+          %td= inventory_supply_list.Condition
+          %td= inventory_supply_list.SupplyDetail
+          %td= inventory_supply_list.TotalSupplyQuantity
+          %td= inventory_supply_list.EarliestAvailability
+          %td= inventory_supply_list.FNSKU
+          %td= inventory_supply_list.InStockSupplyQuantity
+          %td= inventory_supply_list.ASIN
+          %td= inventory_supply_list.SellerSKU
+          %td= link_to 'Show', inventory_supply_list
+          %td= link_to 'Edit', edit_inventory_supply_list_path(inventory_supply_list)
+          %td= link_to 'Destroy', inventory_supply_list, data: { confirm: 'Are you sure?' }, method: :delete

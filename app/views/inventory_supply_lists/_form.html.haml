@@ -1,0 +1,47 @@
+= form_for @inventory_supply_list, html: { class: "form-horizontal", role: "form" } do |f|
+  -if @inventory_supply_list.errors.any?
+    .alert.alert-danger.alert-dismissable{role: "alert"}
+      %button.close{type: "button", data: {dismiss: "alert"} }
+        %span{aria: {hidden: "true"} } &times;
+        %span.sr-only Close
+      %h4= "#{pluralize(@inventory_supply_list.errors.count, "error")} prohibited this inventory_supply_list from being saved:"
+
+      %ul
+        - @inventory_supply_list.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :Condition, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :Condition, class: 'form-control'
+  .form-group
+    = f.label :SupplyDetail, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.number_field :SupplyDetail, class: 'form-control'
+  .form-group
+    = f.label :TotalSupplyQuantity, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.number_field :TotalSupplyQuantity, class: 'form-control'
+  .form-group
+    = f.label :EarliestAvailability, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :EarliestAvailability, class: 'form-control'
+  .form-group
+    = f.label :FNSKU, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :FNSKU, class: 'form-control'
+  .form-group
+    = f.label :InStockSupplyQuantity, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.number_field :InStockSupplyQuantity, class: 'form-control'
+  .form-group
+    = f.label :ASIN, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :ASIN, class: 'form-control'
+  .form-group
+    = f.label :SellerSKU, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_field :SellerSKU, class: 'form-control'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      = f.submit class: 'btn btn-primary'

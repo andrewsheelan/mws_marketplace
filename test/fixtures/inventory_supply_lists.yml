@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  Condition: MyString
+  SupplyDetail: 1
+  TotalSupplyQuantity: 1
+  EarliestAvailability: MyString
+  FNSKU: MyString
+  InStockSupplyQuantity: 1
+  ASIN: MyString
+  SellerSKU: MyString
+
+two:
+  Condition: MyString
+  SupplyDetail: 1
+  TotalSupplyQuantity: 1
+  EarliestAvailability: MyString
+  FNSKU: MyString
+  InStockSupplyQuantity: 1
+  ASIN: MyString
+  SellerSKU: MyString
