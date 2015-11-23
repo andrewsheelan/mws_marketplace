@@ -7,7 +7,7 @@ gem 'rails', '4.1.13'
 gem 'peddler', '~> 1.0', '>= 1.0.1'
 
 # Active Admin interface
-gem 'activeadmin', github: 'activeadmin'
+gem 'activeadmin', '~> 1.0.0.pre2'
 # Plus integrations with:
 gem 'devise'
 gem 'draper'
