@@ -7,14 +7,14 @@ gem 'rails', '4.1.13'
 gem 'peddler', '~> 1.0', '>= 1.0.1'
 
 # Active Admin interface
-gem 'activeadmin', '~> 1.0.0.pre2'
+gem 'activeadmin', github: 'activeadmin'
 # Plus integrations with:
 gem 'devise'
 gem 'draper'
 gem 'pundit'
-
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'rails_12factor', group: :production
+# Use pg as the database for Active Record
+gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -51,3 +51,4 @@ gem 'pry',        group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+ruby "2.2.3"
