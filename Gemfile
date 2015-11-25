@@ -8,6 +8,8 @@ gem 'peddler', '~> 1.0', '>= 1.0.1'
 
 # Active Admin interface
 gem 'activeadmin', github: 'activeadmin'
+gem 'best_in_place', github: 'bernat/best_in_place'
+
 # Plus integrations with:
 gem 'devise'
 gem 'draper'
@@ -28,6 +30,8 @@ gem 'bootstrap-generators', '~> 3.3.4'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
