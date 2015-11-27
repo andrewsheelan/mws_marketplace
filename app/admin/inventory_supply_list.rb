@@ -14,10 +14,12 @@ ActiveAdmin.register InventorySupplyList do
 #   permitted
 # end
 
-  collection_action :refresh_inventory do
-  end
+  collection_action :refresh_inventory
+  collection_action :refresh_product_info
 
   index do
+    column(:image) { |i| image_tag i.image }
+    column(:title)
     column(:asin)
     column(:total_supply_quantity)
     column(:earliest_availability)
@@ -35,6 +37,25 @@ ActiveAdmin.register InventorySupplyList do
   controller do
     # This code is evaluated within the controller class
 
+    def refresh_product_info
+      lst = InventorySupplyList.where(title: nil).pluck(:asin)
+
+      client = MWS::Products::Client.new
+      lst.in_groups_of(10) do |group|
+        group.compact!
+
+        products = client.get_matching_product(*group).parse
+        products.each do |product|
+          db_inventory = InventorySupplyList.find_by(asin: product['ASIN'])
+          db_inventory.update(image: product['Product']['AttributeSets']['ItemAttributes']['SmallImage']['URL'],
+                              title: product['Product']['AttributeSets']['ItemAttributes']['Title'])
+        end
+      end
+
+      redirect_to collection_path, notice: "Products refreshed successfully!"
+
+    end
+
     def refresh_inventory
       # Instance method
       client = MWS::FulfillmentInventory::Client.new
@@ -44,6 +65,7 @@ ActiveAdmin.register InventorySupplyList do
       client = MWS::Products::Client.new
       competitive_pricing_for_asin(client)
       get_my_price_for_asin(client)
+      lowest_offer_listings_for_asin(client)
       redirect_to collection_path, notice: "inventory refreshed successfully!"
     end
 
@@ -67,7 +89,7 @@ ActiveAdmin.register InventorySupplyList do
 
     def competitive_pricing_for_asin(client)
 
-      lst = InventorySupplyList.pluck(:asin)
+      lst = InventorySupplyList.where(competitive_pricing: nil).pluck(:asin)
       lst.in_groups_of(20) do |group|
         group.compact!
 
@@ -87,8 +109,50 @@ ActiveAdmin.register InventorySupplyList do
       end
     end
 
+    def lowest_offer_listings_for_asin(client)
+
+      lst = InventorySupplyList.where(lowest_offer_listings: nil).pluck(:asin)
+      lst.in_groups_of(20) do |group|
+        group.compact!
+
+        products = client.get_lowest_offer_listings_for_asin( *group).parse
+        products.each do |product|
+          db_inventory = InventorySupplyList.find_by(asin: product['ASIN'])
+
+          lowest_offer_listing_prices = product['Product']['LowestOfferListing']['LowestOfferListings']
+          if lowest_offer_listing_prices.nil?
+            db_inventory.update lowest_offer_listings: 0
+          else
+            lowest_offer_listing_price = lowest_offer_listing_prices['LowestOfferListingPrice']
+            lowest_offer_listing_price = lowest_offer_listing_price.first if lowest_offer_listing_price.is_a? Array
+            db_inventory.update lowest_offer_listings: (lowest_offer_listing_price['Price']['LandedPrice']['Amount']).to_f
+          end
+        end
+      end
+    end
+
+    def lowest_priced_offers_for_asin(client)
+
+      lst = InventorySupplyList.where(lowest_priced_offers: nil).pluck(:asin)
+      lst.each do |group|
+        products = client.get_lowest_priced_offers_for_asin( group).parse
+        products.each do |product|
+          db_inventory = InventorySupplyList.find_by(asin: product['ASIN'])
+
+          lowest_priced_offer_prices = product['Product']['LowestPricedOffer']['LowestPricedOffers']
+          if lowest_priced_offer_prices.nil?
+            db_inventory.update lowest_priced_offers: 0
+          else
+            lowest_priced_offer_price = lowest_priced_offer_prices['LowestPricedOffersPrice']
+            lowest_priced_offer_price = lowest_priced_offer_price.first if lowest_priced_offer_price.is_a? Array
+            db_inventory.update lowest_priced_offers: (lowest_priced_offer_price['Price']['LandedPrice']['Amount']).to_f
+          end
+        end
+      end
+    end
+
     def get_my_price_for_asin(client)
-      lst = InventorySupplyList.pluck(:asin)
+      lst = InventorySupplyList.where(my_price: nil).pluck(:asin)
       lst.in_groups_of(20) do |group|
         group.compact!
 
@@ -110,6 +174,10 @@ ActiveAdmin.register InventorySupplyList do
 
   action_item :refresh_inventory, only: :index do
     link_to 'Refresh Inventory', "#{collection_path}/refresh_inventory"
+  end
+
+  action_item :refresh_product_info, only: :index do
+    link_to 'Refresh Product Information', "#{collection_path}/refresh_product_info"
   end
 
   def scoped_collection
